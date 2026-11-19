@@ -86,13 +86,11 @@ class Character {
     + void setDamage(int damage)
 }
 class Enemy {
-    - String sprite
-    + String returnSprite()
-    + Enemy()
-    + Enemy(String name, int health, int damage)
 }
 class Player {
     <<Serializable>>
+    - boolean canHeal
+    - boolean isBlocking
     - int gold
     - String sprite
     + Player()
