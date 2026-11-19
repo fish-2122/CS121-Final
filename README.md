@@ -68,7 +68,9 @@ class Game {
     + void loadPlayer()
     + void savePlayer()
     + void start()
-    + String menu()
+    + String mainMenu()
+    + String playerMenu()
+    + String fightingMenu()
 }
 class Character {
     <<abstract>>
@@ -86,6 +88,8 @@ class Character {
     + void setDamage(int damage)
 }
 class Enemy {
+    -boolean isCharging
+    + void checkForCharging()
 }
 class Player {
     <<Serializable>>
@@ -96,7 +100,7 @@ class Player {
     + Player()
     + Player(String name, int health, int damage, int gold)
     + int getGold()
-    +void setGold(int gold)
+    + void setGold(int gold)
     + String returnSprite()
 }
 class HasSprite {
