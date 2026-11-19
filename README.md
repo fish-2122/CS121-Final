@@ -3,36 +3,35 @@
 ```mermaid
 classDiagram
 class Game {
-
+    - Player player
 }
 class Character {
-    Serializable
 
 }
 class Enemy {
 
 }
-class User {
-
+class Player {
+    <<Serializable>>
 }
 class Inventory {
-    Serializable
+    <<Serializable>>
 }
 class Item {
-    Serializable
+    <<Serializable>>
 }
 class HasSprite {
-    // the sprites will be ASCII art, not actual images
+    // the sprites will be simple ASCII art, not actual images
     <<Interface>>
     String sprite
     String returnSprite()
 }
 
-Character <-- User
-Character <-- Enemy
+Player <|-- Character
+Enemy <|-- Character
 Character --|> HasSprite
 Item --|> HasSprite
-Game *-- Character
-Character *-- Inventory
+Game *-- Player
+Player *-- Inventory
 Inventory *-- Item
 ```
