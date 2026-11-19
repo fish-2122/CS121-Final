@@ -114,6 +114,114 @@ Character --|> HasSprite
 Game *-- Player
 ```
 
+# Use Case Analysis
+The game will look something like this
+```
+Welcome to Monster Slayer
+0) quit game
+1) start game
+
+1)
+enter name: 
+
+jeremy
+welcome to monster slayer, jeremy! you need to slay monsters to get coins so you can retire!
+0) save and quit
+1) continue
+2) heal
+3) check stats
+4) count gold
+
+3)
+jeremy
+    :)
+  / | \
+   / \
+health - 20
+damage min/max - 2, 6
+
+0) save and quit
+1) continue
+2) heal
+3) check stats
+4) count gold
+
+2)
+you have no healing supplies...
+
+0) save and quit
+1) continue
+2) heal
+3) check stats
+4) count gold
+
+1)
+a monster appears!
+0) run away
+1) attack
+2) block
+3) inspect monster
+
+3)
+monster
+   \/
+   >:(
+  / | \
+   / \
+health - 10
+damage min/max - 1, 4
+
+0) run away
+1) attack
+2) block
+3) inspect monster
+
+1)
+you attack the monster for 4 damage
+the monster starts charging an attack
+
+0) run away
+1) attack
+2) block
+3) inspect monster
+
+2)
+you block
+the monster attacks you!
+you block the damage
+
+0) run away
+1) attack
+2) block
+3) inspect monster
+
+1)
+you attack the monster for 6 damage
+you defeat the monster!
+you also pick up some healing supplies
+
+0) save and quit
+1) continue
+2) heal
+3) check stats
+4) count gold
+
+4)
+you have 10 gold
+thats enough to retire!
+do you want to retire or keep going?
+0) retire
+1) keep going
+
+0)
+Welcome to Monster Slayer
+0) quit game
+1) start game
+
+0)
+goodbye!
+```
+
 # Sprites (subject to change)
 ## Player
 ### String:
@@ -131,11 +239,12 @@ Game *-- Player
 ## Enemy
 ### String:
 ```
-"   >:(\n/ | \\\n/ \\\n"
+"   \\/\n   >:(\n/ | \\\n/ \\\n"
 ```
 
 ### Prints:
 ```
+   \/
    >:(
   / | \
    / \
