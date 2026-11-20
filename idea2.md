@@ -1,5 +1,5 @@
 # Dungeons and Dragons Character and Monster Sheets
-This app will let the user create and store character sheets for DnD. It will use an API (https://www.dnd5eapi.co/api) to get stats, classes, spells, etc.
+This app will let the user create and store character sheets for DnD. It will use an API (https://www.dnd5eapi.co/api) to get classes, races, spells etc.
 
 # Use-case Analysis Prototype
 Using the app will look something like this. The final product will be more detailed, this is just to get an idea of what to make.
