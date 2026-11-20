@@ -105,6 +105,13 @@ DnD Character Sheet Creator
 goodbye!
 ```
 
+# Character Sheet Requirements
+List of things a character sheet needs:
+- Name
+- Race
+- Class
+
+
 # Flowchart
 ```mermaid
 graph TD
