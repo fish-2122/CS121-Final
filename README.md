@@ -3,6 +3,14 @@ For our final project, we need to make an app from scratch. I had 2 ideas, I dec
 
 # Dungeons and Dragons Character Sheet Creator
 This app will let the user create and store character sheets for DnD. It will use an API (https://www.dnd5eapi.co/api) to get classes, races, spells etc.
+Intended users: Anyone who plays Dungeons and Dragons
+Purpose: This program is supposed to make it easy for players to create, store, and edit character sheets.
+Technologies/structures needed:
+- Ability to save data
+- Ability to load data
+- Access data from an API
+- Take data from user to create character sheets
+- Dynamic list
 
 # Use-case Analysis Prototype
 Using the app will look something like this. The final product will be more detailed, this is just to get an idea of what to make.
