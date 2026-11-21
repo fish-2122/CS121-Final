@@ -1,181 +1,254 @@
-# CS121-Final
-For our final project, we need to make an app from scratch. I had 2 ideas, I decided to go with my second one. You can see everything for the first idea in the idea1.md file.
+# Monster Slayer
+This will be a simple text-based game ran in the terminal. It will be similar to the banking app we made, where a serialized class is saved for user data and everything will be done through a menu in the terminal. You will play as an adventurer who needs to get a certain amount of gold. You get this gold by fighting monsters.
 
-# Dungeons and Dragons Character Sheet Creator
-This app will let the user create and store character sheets for DnD.<br>
-Intended users: Anyone who plays Dungeons and Dragons<br>
-Purpose: This program is supposed to make it easy for players to create, store, and edit character sheets.<br>
-Technologies/structures needed:
-- Ability to save data
-- Ability to load data
-- Take data from user to create character sheets
-- Dynamic list
-
-# Use-case Analysis
-Using the app will look something like this. The final product will be more detailed, this is just to get an idea of what to make.
+# Game Flow
+```mermaid
+graph TD
+    run(game compiles and runs) --> mainMenu(prints game name in terminal)
+    mainMenu --> mainMenuOptions(print starting menu options: 0 exit game, 1 start game)
+    mainMenuOptions --> |0| stopGame(program stops)
+    mainMenuOptions --> |1| loadPlayer(game tries to load player)
+    loadPlayer --> |fail| createPlayer(ask user for player name to create new Player)
+    createPlayer --> playIntro(print in terminal introduction to game and goal of the game)
+    loadPlayer --> |success| loadCharacter(loads character from file)
+    playIntro --> playerMenuOptions(print player menu options: 0 save and quit, 1 continue moving, 2 heal, 3 show player stats, 4 count gold)
+    loadCharacter --> playerMenuOptions
+    playerMenuOptions --> |0| saveGame(the Player object is saved)
+    playerMenuOptions --> |1| createMonster(creates a monster for the player to fight)
+    playerMenuOptions --> |2| healCheck(check if player can heal)
+    playerMenuOptions --> |3| showPlayerStats(print out health, damage min and max, and the player's sprite)
+    playerMenuOptions --> |4| showGold(gets gold integer and prints it in console)
+    saveGame --> mainMenu
+    showPlayerStats --> playerMenuOptions
+    healCheck --> |true| heal(heal player's health. canHeal is set to false)
+    heal --> playerMenuOptions
+    healCheck --> |false| dontHeal(say that player has no healing available and dont heal)
+    dontHeal --> playerMenuOptions
+    showGold --> checkForGoldThreshold(check if the player meets the gold threshold to complete the game)
+    checkForGoldThreshold --> |false| playerMenuOptions
+    checkForGoldThreshold --> |true| meetGoldThreshold(congradulate the player and ask if they want to 0 end the game, 1 keep going)
+    meetGoldThreshold --> |0| saveGame
+    meetGoldThreshold --> |1| playerMenuOptions
+    createMonster --> playerFightOptions(shows options for when player is in a fight: 0 run away, 1 attack, 2 block, 3 inspect monster)
+    playerFightOptions --> |0| tryToRun(the player has a 50/50 chance of running away or failing and getting hit)
+    playerFightOptions --> |1| attackMonster(attacks the monster. damage will be between the player's min and max damage)
+    playerFightOptions --> |2| block(player starts blocking for one turn)
+    playerFightOptions --> |3| printMonster(the monster's health, damage min and max, and sprite are printed in the console)
+    printMonster --> playerFightOptions
+    tryToRun --> |succeed| playerMenuOptions
+    tryToRun --> |fail| monsterStartsAttack(check if monster is charging attack)
+    monsterStartsAttack --> |true| monsterChargeAttack(monster rolls for damage and the roll is doubled)
+    monsterStartsAttack --> |false| monsterFlipForChargeAttack(25% chance monster starts to do a charge attack)
+    monsterFlipForChargeAttack --> |succeed| monsterStartsCharging(monster starts charging it's attack)
+    monsterStartsCharging --> playerFightOptions
+    monsterFlipForChargeAttack --> |fail| monsterAttack(monster attacks player)
+    monsterAttack --> checkIfBlocking(check if the player is blocking)
+    monsterChargeAttack --> checkIfBlocking
+    checkIfBlocking --> |true| noDamage(player takes no damage)
+    noDamage --> playerFightOptions
+    checkIfBlocking --> |false| takeDamage(player takes damage)
+    takeDamage --> checkIfDead(check if the player is dead)
+    checkIfDead --> |false| playerFightOptions
+    checkIfDead --> |true| playerIsDead(tell player they are dead)
+    playerIsDead --> mainMenu
+    block --> monsterStartsAttack
+    attackMonster --> checkIfMonsterDead(checks if monster is dead)
+    checkIfMonsterDead --> |false| monsterStartsAttack
+    checkIfMonsterDead --> |true| getGold(take gold from the dead monster and add it to player's gold. canHeal is set to true)
+    getGold --> playerMenuOptions
 ```
-DnD Character Sheet Creator
-0) quit
-1) create character
-2) view stored characters
+
+# Class Diagram
+W.I.P.
+```mermaid
+classDiagram
+class Game {
+    - Player player
+    + static void main(String[] args)
+    + Game()
+    + void loadPlayer()
+    + void savePlayer()
+    + void start()
+    + String mainMenu()
+    + String playerMenu()
+    + String fightingMenu()
+}
+class Character {
+    <<abstract>>
+    - String name
+    - int health
+    - int damageMin
+    - int damageMax
+    + void dealDamage(int damageMin, int damageMax, Character target)
+    + void takeDamage(int amount)
+    + String getName()
+    + void setName(String name)
+    + int getHealth()
+    + void setHealth(int health)
+    + int getDamage()
+    + void setDamage(int damage)
+}
+class Enemy {
+    -boolean isCharging
+    + void checkForCharging()
+}
+class Player {
+    <<Serializable>>
+    - boolean canHeal
+    - boolean isBlocking
+    - int gold
+    - String sprite
+    + Player()
+    + Player(String name, int health, int damage, int gold)
+    + int getGold()
+    + void setGold(int gold)
+    + String returnSprite()
+}
+class HasSprite {
+    // the sprites will be simple ASCII art, not actual images
+    <<Interface>>
+    String sprite
+    String returnSprite()
+}
+
+Player <|-- Character
+Enemy <|-- Character
+Character --|> HasSprite
+Game *-- Player
+```
+
+# Use Case Analysis
+The game will look something like this
+```
+Welcome to Monster Slayer
+0) quit game
+1) start game
 
 1)
-editing character sheet
-0) save and quit
-1) name
-2) race
-3) class
+enter name: 
 
-1)
-current name: blank
-enter name:
 jeremy
-
-1)
-editing character sheet
+welcome to monster slayer, jeremy! you need to slay monsters to get coins so you can retire!
 0) save and quit
-1) name
-2) race
-3) class
-
-2)
-current race: blank
-select race:
-0) dragonborn
-1) dwarf
-2) elf
-3) gnome
-4) human
-5) tiefling
-
-4)
-editing character sheet
-0) save and quit
-1) name
-2) race
-3) class
+1) continue
+2) heal
+3) check stats
+4) count gold
 
 3)
-current class: blank
-select class:
-0) cleric
-1) fighter
-2) paladin
-3) ranger
-4) wizard
+jeremy
+    :)
+  / | \
+   / \
+health - 20
+damage min/max - 2, 6
 
-1)
-editing character sheet
 0) save and quit
-1) name
-2) race
-3) class
-
-0)
-DnD Character Sheet Creator
-0) quit
-1) create character
-2) view stored characters
+1) continue
+2) heal
+3) check stats
+4) count gold
 
 2)
-stored characters:
-0) back
-1) jeremy
+you have no healing supplies...
+
+0) save and quit
+1) continue
+2) heal
+3) check stats
+4) count gold
 
 1)
-options:
-0) back
-1) view
-2) edit
-3) delete
+a monster appears!
+0) run away
+1) attack
+2) block
+3) inspect monster
+
+3)
+monster
+   \/
+   >:(
+  / | \
+   / \
+health - 10
+damage min/max - 1, 4
+
+0) run away
+1) attack
+2) block
+3) inspect monster
 
 1)
-name: jeremy
-race: human
-class: wizard
+you attack the monster for 4 damage
+the monster starts charging an attack
 
-options:
-0) back
-1) view
-2) edit
-3) delete
+0) run away
+1) attack
+2) block
+3) inspect monster
+
+2)
+you block
+the monster attacks you!
+you block the damage
+
+0) run away
+1) attack
+2) block
+3) inspect monster
+
+1)
+you attack the monster for 6 damage
+you defeat the monster!
+you also pick up some healing supplies
+
+0) save and quit
+1) continue
+2) heal
+3) check stats
+4) count gold
+
+4)
+you have 10 gold
+thats enough to retire!
+do you want to retire or keep going?
+0) retire
+1) keep going
 
 0)
-stored characters:
-0) back
-1) jeremy
-
-0)
-DnD Character Sheet Creator
-0) quit
-1) create character
-2) view stored characters
+Welcome to Monster Slayer
+0) quit game
+1) start game
 
 0)
 goodbye!
 ```
 
-# Data Design
-The way this app will manage data will be with serializable classes. Data received from the user will be stored in a serializable class called CharacterSheet. Each character sheet the user creates will store it's data in a CharacterSheet object. All of these objects will be stored in a list (like and ArrayList or maybe a LinkedList). Because CharacterSheet will be serializable, it will allow this list of objects to be saved in a .dat file. This will allow the created character sheets to be loaded later on even if the program has been stopped before.
-
-# Algorithm
-```mermaid
-classDiagram
-    class Main {
-        - ArrayList<CharacterSheet> characters
-        + static void main(String[] args)
-        + Main()
-        + void loadCharacters()
-        + void saveCharacter()
-        + void start()
-    }
-
-    class CharacterSheet{
-        <<serializable>>
-        - String name
-        - CharacterClass class
-        - Race race
-        - int level
-        + CharacterSheet()
-    }
-
-    class CharacterClass {
-        <<abstract>>
-        - String name
-    }
-
-    class WizardClass {
-
-    }
-
-    class ClericClass {
-
-    }
-
-    class Race {
-        
-    }
-
-    class Spell {
-        <<abstract>>
-    }
-
-    class HasSpells {
-        <<interface>>
-    }
-
-    Main *-- CharacterSheet
-    CharacterSheet *-- CharacterClass
-    CharacterSheet *-- Race
-    WizardClass <|-- CharacterClass
-    ClericClass <|-- CharacterClass
-    WizardClass ..|> HasSpells
-    ClericClass ..|> HasSpells
+# Sprites (subject to change)
+## Player
+### String:
+```
+"    :)\n/ | \\\n/ \\"
 ```
 
-# Character Sheet Requirements
-List of things a character sheet needs:
-- Name
-- Race
-- Class
-- Level
+### Prints:
+```
+    :)
+  / | \
+   / \
+```
+
+## Enemy
+### String:
+```
+"   \\/\n   >:(\n/ | \\\n/ \\\n"
+```
+
+### Prints:
+```
+   \/
+   >:(
+  / | \
+   / \
+```
