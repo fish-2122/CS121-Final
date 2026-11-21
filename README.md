@@ -66,9 +66,11 @@ class Game {
     - Player player
     + static void main(String[] args)
     + Game()
+    + void createCharacter()
     + void loadPlayer()
     + void savePlayer()
     + void start()
+    + void startFight()
     + String mainMenu()
     + String playerMenu()
     + String fightingMenu()
@@ -85,11 +87,16 @@ class Character {
     + void setName(String name)
     + int getHealth()
     + void setHealth(int health)
-    + int getDamage()
-    + void setDamage(int damage)
+    + int getDamageMin()
+    + void setDamageMin(int damage)
+    + int getDamageMax()
+    + void setDamageMax(int damage)
+    + String getSprite()
+    + void setSprite()
+    
 }
 class Enemy {
-    -boolean isCharging
+    - boolean isCharging
     + void checkForCharging()
 }
 class Player {
@@ -102,17 +109,22 @@ class Player {
     + Player(String name, int health, int damage, int gold)
     + int getGold()
     + void setGold(int gold)
-    + String returnSprite()
+    + boolean getBlocking()
+    + void setBlocking(boolean tf)
+    + boolean getCanHeal()
+    + void setCanHeal(boolean tf)
+    + void heal()
 }
 class HasSprite {
     // the sprites will be simple ASCII art, not actual images
     <<Interface>>
     String sprite
-    String returnSprite()
+    String getSprite()
+    void setSprite()
 }
 
-Player <|-- Character
-Enemy <|-- Character
+Player --> Character
+Enemy --> Character
 Character --|> HasSprite
 Game *-- Player
 ```
